@@ -1,0 +1,17 @@
+
+.div {
+    display: flex;
+  
+    align-items: center;
+    color: #8a8ab7;
+    flex-direction: column;
+    margin-top: 100px;
+  }
+  .paragraph {
+    font-size: 25px;
+    color: #010101;
+    text-align: center;
+    margin: 25px 0 10px;
+    margin-bottom: 20px;
+  }
+  
