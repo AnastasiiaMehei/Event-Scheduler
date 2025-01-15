@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction, RequestHandler } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 
 // Додаємо рядки для дозволу CORS
-app.use((req, res, next) => {
+const corsMiddleware: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -24,10 +24,13 @@ app.use((req, res, next) => {
     "GET, POST, PUT, DELETE, OPTIONS"
   );
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
+    res.sendStatus(200);
+    return; // Завершити виконання функції
   }
   next();
-});
+};
+
+app.use(corsMiddleware);
 
 // Вказуємо шлях до директорії з побудованими активами
 const publicDirectory = path.join(__dirname, 'build');
@@ -35,7 +38,7 @@ app.use(express.static(publicDirectory));
 
 const eventsFilePath = path.join(__dirname, 'data', 'events.json');
 
-app.get('/events', (req, res) => {
+app.get('/events', (req: Request, res: Response) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -45,7 +48,7 @@ app.get('/events', (req, res) => {
   });
 });
 
-app.post('/events', (req, res) => {
+app.post('/events', (req: Request, res: Response) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -64,7 +67,7 @@ app.post('/events', (req, res) => {
   });
 });
 
-app.put('/events/:id', (req, res) => {
+app.put('/events/:id', (req: Request, res: Response) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -86,7 +89,7 @@ app.put('/events/:id', (req, res) => {
   });
 });
 
-app.delete('/events/:id', (req, res) => {
+app.delete('/events/:id', (req: Request, res: Response) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -109,7 +112,7 @@ app.delete('/events/:id', (req, res) => {
 });
 
 // Обслуговуємо HTML-файл для будь-яких інших маршрутів, що залишилися
-app.get('*', (req, res) => {
+app.get('*', (req: Request, res: Response) => {
   res.sendFile(path.join(publicDirectory, 'index.html'));
 });
 
