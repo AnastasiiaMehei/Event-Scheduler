@@ -19,6 +19,8 @@ import Event from "../Event/Event";
 import Loader from "../Loader/Loader"; 
 import css from "../EventList/EventList.module.css";
 import { RootState } from "../../redux/store";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface NewEvent {
   name: string;
@@ -48,6 +50,14 @@ export default function EventList() {
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
+    const isDuplicate = events.some(
+      (event) =>
+        event.date === newEvent.date && event.time === newEvent.time
+    );
+    if (isDuplicate) {
+      toast.error("An event with the same date and time already exists!");
+      return;
+    }
     dispatch(createEvent(newEvent));
     setShowCreateForm(false);
     setNewEvent({
