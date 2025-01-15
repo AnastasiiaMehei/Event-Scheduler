@@ -5,11 +5,13 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "../Layout/Layout";
 import HomePage from "../../pages/HomePage/HomePage";
 import EventPage from "../../pages/EventPage/EventPage";
-
+import { ToastContainer } from 'react-toastify';
 function App() {
 
   return (
     <>
+             <ToastContainer />
+
     <Layout>
     <Suspense fallback={null}>
     <Routes>

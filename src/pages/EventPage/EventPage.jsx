@@ -5,7 +5,6 @@ export default function EventPage() {
 
   return (
     <>
-    <p>events</p>
     <EventList/>
     </>
   );

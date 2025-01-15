@@ -1,13 +1,23 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { createSelector } from "reselect";
+import { RootState } from "../store";
 import { selectAllEvents } from "../events/selectors";
+
+interface FiltersState {
+  name: string;
+  date: string;
+  category: string;
+}
+
+const initialState: FiltersState = {
+  name: "",
+  date: "",
+  category: "",
+};
 
 const filtersSlice = createSlice({
   name: "filters",
-  initialState: {
-    name: "",
-    date: "",
-    category: ""
-  },
+  initialState,
   reducers: {
     changeEventsFilter: (state, action) => {
       state.name = action.payload;
@@ -17,21 +27,23 @@ const filtersSlice = createSlice({
     },
     changeCategoryFilter: (state, action) => {
       state.category = action.payload;
-    }
+    },
   },
 });
+
 export const { changeEventsFilter, changeDateFilter, changeCategoryFilter } = filtersSlice.actions;
 export default filtersSlice.reducer;
 
-export const selectEventsFilter = (state) => state.filters?.name ?? "";
-export const selectDateFilter = (state) => state.filters?.date ?? "";
-export const selectCategoryFilter = (state) => state.filters?.category ?? "";
+export const selectEventsFilter = (state: RootState) => state.filters?.name ?? "";
+export const selectDateFilter = (state: RootState) => state.filters?.date ?? "";
+export const selectCategoryFilter = (state: RootState) => state.filters?.category ?? "";
 
 export const selectFilteredEvents = createSelector(
   [selectAllEvents, selectEventsFilter, selectDateFilter, selectCategoryFilter],
   (events, nameFilter, dateFilter, categoryFilter) => {
-    return events.filter(event => {
-      const matchesName = !nameFilter || event.name.toLowerCase().includes(nameFilter.toLowerCase());
+    if (!events) return [];
+    return events.filter((event) => {
+      const matchesName = !nameFilter || (event.name && event.name.toLowerCase().includes(nameFilter.toLowerCase()));
       const matchesDate = !dateFilter || event.date === dateFilter;
       const matchesCategory = !categoryFilter || event.category === categoryFilter;
       return matchesName && matchesDate && matchesCategory;

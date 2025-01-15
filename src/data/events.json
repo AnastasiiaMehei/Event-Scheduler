@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "Kickoff Meeting",
+    "date": "2025-01-20",
+    "time": "09:00",
+    "category": "meeting",
+    "description": "Initial meeting to discuss project goals and timeline."
+  },
+  {
+    "id": 2,
+    "name": "Code Review Session",
+    "date": "2025-01-25",
+    "time": "14:00",
+    "category": "workshop",
+    "description": "Reviewing the latest code changes and discussing improvements."
+  },
+  {
+    "id": 3,
+    "name": "Project Demo",
+    "date": "2025-02-10",
+    "time": "11:00",
+    "category": "conference",
+    "description": "Demonstrating the new features implemented in the project."
+  },
+  {
+    "id": 4,
+    "name": "Bug Fixing Sprint",
+    "date": "2025-02-18",
+    "time": "10:00",
+    "category": "workshop",
+    "description": "Dedicated time to identify and fix bugs in the application."
+  },
+  {
+    "id": 5,
+    "name": "Client Presentation",
+    "date": "2025-02-24",
+    "time": "15:00",
+    "category": "conference",
+    "description": "Presenting the project progress to the client and gathering feedback."
+  },
+  {
+    "id": 6,
+    "name": "Team Building Event",
+    "date": "2025-03-05",
+    "time": "12:00",
+    "category": "party",
+    "description": "An event to strengthen team relationships through fun activities."
+  }
+]

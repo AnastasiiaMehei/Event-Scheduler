@@ -49,6 +49,7 @@ button {
   border: 1px solid black;
   width: 129px;
   margin-top: 15px;
+  margin-bottom: 15px;
   background-color: #8a8ab7;
   border-color: chartreuse;
 }
@@ -64,8 +65,12 @@ form {
   margin: 0 auto;
   padding: 15px;
   width: 250px;
-  height: 100%;
+  /* height: 100%; */
   margin-bottom: 30px;
+  display: flex
+  ;
+      flex-direction: column;
+      gap: 3px;
 }
 
 @media (prefers-color-scheme: light) {
