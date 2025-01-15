@@ -42,7 +42,7 @@ export default function EventList() {
     description: "",
   });
   const [loading, setLoading] = useState(true); // Add loading state
-  const [displayCount, setDisplayCount] = useState(4); // Add state for the number of events to display
+  const [displayCount, setDisplayCount] = useState(5); // Add state for the number of events to display
 
   useEffect(() => {
     dispatch(fetchEvents()).then(() => setLoading(false)); // Set loading to false after fetching events
