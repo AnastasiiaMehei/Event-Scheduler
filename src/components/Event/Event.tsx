@@ -25,15 +25,18 @@ interface CategoryOption {
   label: string;
 }
 
+interface EventData {
+  id: number;
+  name: string;
+  date: string;
+  time: string;
+  category: string;
+  description: string;
+}
+
 interface EventProps {
   id: number;
-  event: {
-    name: string;
-    date: string;
-    time: string;
-    category: string;
-    description: string;
-  };
+  event: EventData;
 }
 
 const Event: React.FC<EventProps> = ({ id, event }) => {
@@ -73,7 +76,8 @@ const Event: React.FC<EventProps> = ({ id, event }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateEvent({ id: event.id, updatedEvent: editedEvent })).then(() => {
+    dispatch(updateEvent({ id: event.id, updatedEvent: editedEvent }))
+      .then(() => {
         toast.success("Event updated successfully");
         setIsEditing(false);
       })
