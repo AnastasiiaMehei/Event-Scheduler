@@ -14,4 +14,4 @@
     margin: 25px 0 10px;
     margin-bottom: 20px;
   }
-  
+  .image { max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 20px;}

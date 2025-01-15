@@ -50,4 +50,8 @@
     letter-spacing: -0.02em;
     text-align: center;
   }
-  
+  .btnsDiv {
+    display: flex
+    ;
+        justify-content: center;
+  }

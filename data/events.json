@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "name": "Kickoff Meetingj fffffffff",
+    "name": "Vika",
     "date": "2025-01-20",
     "time": "09:00",
     "category": "meeting",
@@ -62,5 +62,21 @@
     "category": "conference",
     "description": "Hello world!",
     "id": 8
+  },
+  {
+    "name": "fffff11111111111",
+    "date": "2025-01-09",
+    "time": "23:43",
+    "category": "webinar",
+    "description": "fffffffffffffffffffff",
+    "id": 9
+  },
+  {
+    "name": "HSHD",
+    "date": "2025-04-30",
+    "time": "02:26",
+    "category": "birthday",
+    "description": "Hello world!",
+    "id": 10
   }
 ]

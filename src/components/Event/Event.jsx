@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { deleteEvent, updateEvent } from "../../redux/events/operations";
 import { FaTrashCan } from "react-icons/fa6";
 import { GrEdit } from "react-icons/gr";
+import { MdClose } from "react-icons/md";
+
 import css from "./Event.module.css";
 const categories = [
   { value: "meeting", label: "Meeting" },
@@ -61,40 +63,44 @@ export default function Event({ id, event }) {
   if (showModal) {
     return (
       <Modal isOpen={showModal} onClose={cancelDelete}>
-        {" "}
-        <h2>Confirm action</h2>{" "}
-        <p>Are you sure you want to delete this event?</p>{" "}
-        <button onClick={confirmDelete}>Yes, delete</button>{" "}
-        <button onClick={cancelDelete}>Cancel</button>{" "}
+        <h2>Confirm action</h2>
+        <p>Are you sure you want to delete this event?</p>
+        <button onClick={confirmDelete}>Yes, delete</button>
+        <button onClick={cancelDelete}>Cancel</button>
       </Modal>
     );
   }
   if (isEditing) {
     return (
-      <form onSubmit={handleSubmit}>
-        {" "}
-        <label>Name:</label>{" "}
+      <form onSubmit={handleSubmit} >
+    <div>
+    <label>Name:</label>
         <input
           type="text"
           name="name"
           value={editedEvent.name}
           onChange={handleChange}
-        />{" "}
-        <label>Date:</label>{" "}
+        />
+    </div>
+    <div>
+    <label>Date:</label>
         <input
           type="date"
           name="date"
           value={editedEvent.date}
           onChange={handleChange}
-        />{" "}
-        <label>Time:</label>{" "}
+        />
+    </div>
+      <div>
+      <label>Time:</label>
         <input
           type="time"
           name="time"
           value={editedEvent.time}
           onChange={handleChange}
-        />{" "}
-        <label>Category:</label>{" "}
+        />
+      </div>
+        <label>Category:</label>
         <Select
           options={categories}
           value={categories.find((cat) => cat.value === editedEvent.category)}
@@ -104,43 +110,41 @@ export default function Event({ id, event }) {
               category: selectedOption ? selectedOption.value : "",
             }))
           }
-        />{" "}
-        <label>Description:</label>{" "}
+        />
+      <div>
+      <label>Description:</label>
         <textarea
           name="description"
           value={editedEvent.description}
           onChange={handleChange}
-        ></textarea>{" "}
-        <button type="submit">Save</button>{" "}
+        ></textarea>
+      </div>
+<div>
+<button type="submit">Save</button>
+
+</div>
       </form>
     );
   }
   return (
     <div className={css.container}>
-      {" "}
-      <h3>{event.name}</h3>{" "}
+      <h3>{event.name}</h3>
       <p>
-        {" "}
-        <span className={css.span}>Date:</span> {event.date}{" "}
-      </p>{" "}
+        <span className={css.span}>Date:</span> {event.date}
+      </p>
       <p>
-        {" "}
-        <span className={css.span}>Time:</span> {event.time}{" "}
-      </p>{" "}
+        <span className={css.span}>Time:</span> {event.time}
+      </p>
       <p>
-        {" "}
-        <span className={css.span}>Category:</span> {event.category}{" "}
-      </p>{" "}
+        <span className={css.span}>Category:</span> {event.category}
+      </p>
       <p>
-        {" "}
-        <span className={css.span}>Description:</span> {event.description}{" "}
-      </p>{" "}
+        <span className={css.span}>Description:</span> {event.description}
+      </p>
       <div className={css.btns}>
-        {" "}
         <button type="button" onClick={handleEdit}>
-          {" "}
-          <GrEdit />{" "}
-        </button>{" "}
+          <GrEdit />
+        </button>
         <button className={css.btn} onClick={handleDelete}>
           <FaTrashCan />
         </button>

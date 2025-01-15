@@ -1,9 +1,14 @@
 .container {
-  width: 323px;
-  height: 350px;  margin: 0 auto;
+  width: 230px;
+  height: 496px;
+  margin: 0 auto;
   padding: 20px;
   border-radius: 8px;
+  display: flex
+;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex-direction: column;
+  gap: 15px;
 }
 .container label {
   display: block;
