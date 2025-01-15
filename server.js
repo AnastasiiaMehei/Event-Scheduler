@@ -29,7 +29,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Вказуємо шлях до директорії з побудованими активами
+const publicDirectory = path.join(__dirname, 'build');
+app.use(express.static(publicDirectory));
+
 const eventsFilePath = path.join(__dirname, 'data', 'events.json');
+
 app.get('/events', (req, res) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
@@ -101,6 +106,11 @@ app.delete('/events/:id', (req, res) => {
       res.sendStatus(204);
     });
   });
+});
+
+// Обслуговуємо HTML-файл для будь-яких інших маршрутів, що залишилися
+app.get('*', (req, res) => {
+  res.sendFile(path.join(publicDirectory, 'index.html'));
 });
 
 app.listen(PORT, () => {

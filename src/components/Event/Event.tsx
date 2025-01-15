@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Select from "react-select";
+import Select, { SingleValue } from "react-select";
 import "react-datepicker/dist/react-datepicker.css";
 import Modal from "../Modal/Modal";
 import { useDispatch } from "react-redux";
@@ -9,8 +9,8 @@ import { deleteEvent, updateEvent } from "../../redux/events/operations";
 import { FaTrashCan } from "react-icons/fa6";
 import { GrEdit } from "react-icons/gr";
 import { MdClose } from "react-icons/md";
-
 import css from "./Event.module.css";
+
 const categories = [
   { value: "meeting", label: "Meeting" },
   { value: "birthday", label: "Birthday" },
@@ -19,14 +19,33 @@ const categories = [
   { value: "webinar", label: "Webinar" },
   { value: "party", label: "Party" },
 ];
-export default function Event({ id, event }) {
+
+interface CategoryOption {
+  value: string;
+  label: string;
+}
+
+interface EventProps {
+  id: number;
+  event: {
+    name: string;
+    date: string;
+    time: string;
+    category: string;
+    description: string;
+  };
+}
+
+const Event: React.FC<EventProps> = ({ id, event }) => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);
   const dispatch = useDispatch();
+
   const handleDelete = () => {
     setShowModal(true);
   };
+
   const confirmDelete = () => {
     dispatch(deleteEvent(id))
       .then(() => {
@@ -38,20 +57,23 @@ export default function Event({ id, event }) {
         toast.error("Failed to delete event.");
       });
   };
+
   const cancelDelete = () => {
     setShowModal(false);
   };
+
   const handleEdit = () => {
     setIsEditing(true);
   };
-  const handleChange = (e) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setEditedEvent((prev) => ({ ...prev, [name]: value }));
   };
-  const handleSubmit = (e) => {
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateEvent({ id: event.id, updatedEvent: editedEvent }))
-      .then(() => {
+    dispatch(updateEvent({ id: event.id, updatedEvent: editedEvent })).then(() => {
         toast.success("Event updated successfully");
         setIsEditing(false);
       })
@@ -60,6 +82,7 @@ export default function Event({ id, event }) {
         toast.error("Failed to update event.");
       });
   };
+
   if (showModal) {
     return (
       <Modal isOpen={showModal} onClose={cancelDelete}>
@@ -70,62 +93,63 @@ export default function Event({ id, event }) {
       </Modal>
     );
   }
+
   if (isEditing) {
     return (
-      <form onSubmit={handleSubmit} >
-    <div>
-    <label>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={editedEvent.name}
-          onChange={handleChange}
-        />
-    </div>
-    <div>
-    <label>Date:</label>
-        <input
-          type="date"
-          name="date"
-          value={editedEvent.date}
-          onChange={handleChange}
-        />
-    </div>
-      <div>
-      <label>Time:</label>
-        <input
-          type="time"
-          name="time"
-          value={editedEvent.time}
-          onChange={handleChange}
-        />
-      </div>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={editedEvent.name}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Date:</label>
+          <input
+            type="date"
+            name="date"
+            value={editedEvent.date}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label>Time:</label>
+          <input
+            type="time"
+            name="time"
+            value={editedEvent.time}
+            onChange={handleChange}
+          />
+        </div>
         <label>Category:</label>
         <Select
           options={categories}
           value={categories.find((cat) => cat.value === editedEvent.category)}
-          onChange={(selectedOption) =>
+          onChange={(selectedOption: SingleValue<CategoryOption>) =>
             setEditedEvent((prev) => ({
               ...prev,
               category: selectedOption ? selectedOption.value : "",
             }))
           }
         />
-      <div>
-      <label>Description:</label>
-        <textarea
-          name="description"
-          value={editedEvent.description}
-          onChange={handleChange}
-        ></textarea>
-      </div>
-<div>
-<button type="submit">Save</button>
-
-</div>
+        <div>
+          <label>Description:</label>
+          <textarea
+            name="description"
+            value={editedEvent.description}
+            onChange={handleChange}
+          ></textarea>
+        </div>
+        <div>
+          <button type="submit">Save</button>
+        </div>
       </form>
     );
   }
+
   return (
     <div className={css.container}>
       <h3>{event.name}</h3>
@@ -151,4 +175,6 @@ export default function Event({ id, event }) {
       </div>
     </div>
   );
-}
+};
+
+export default Event;
