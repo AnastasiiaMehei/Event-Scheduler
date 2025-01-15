@@ -68,6 +68,25 @@ export default function EventList() {
     setNewEvent((prevState) => ({ ...prevState, [name]: value }));
   };
 
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "name":
+        dispatch(changeEventsFilter(value));
+        break;
+      case "date":
+        dispatch(changeDateFilter(value));
+        break;
+      case "category":
+        dispatch(changeCategoryFilter(value));
+        break;
+      default:
+        break;
+    }
+  };
+
   const loadMore = () => {
     setDisplayCount((prevCount) => prevCount + 4); // Increase display count by 4
   };
@@ -101,6 +120,29 @@ export default function EventList() {
         <Loader />
       ) : (
         <>
+          <div className={css.filters}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Search by name"
+              onChange={handleFilterChange}
+            />
+            <input
+              type="date"
+              name="date"
+              placeholder="Filter by date"
+              onChange={handleFilterChange}
+            />
+            <select name="category" onChange={handleFilterChange}>
+              <option value="">Filter by category</option>
+              <option value="meeting">Meeting</option>
+              <option value="birthday">Birthday</option>
+              <option value="workshop">Workshop</option>
+              <option value="conference">Conference</option>
+              <option value="webinar">Webinar</option>
+              <option value="party">Party</option>
+            </select>
+          </div>
           {showCreateForm && (
             <form onSubmit={handleCreate} >
   <label>
