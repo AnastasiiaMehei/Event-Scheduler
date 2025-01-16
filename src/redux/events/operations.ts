@@ -11,7 +11,7 @@ interface Event {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:3001",
+  baseURL: "https://event-scheduler-server.onrender.com/",
 });
 
 // Отримання всіх подій
