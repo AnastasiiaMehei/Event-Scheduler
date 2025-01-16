@@ -39,10 +39,15 @@ interface EventProps {
   event: EventData;
 }
 
+const truncateText = (text: string, length: number) => {
+  return text.length > length ? text.substring(0, length) + "..." : text;
+};
+
 const Event: React.FC<EventProps> = ({ id, event }) => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);
+  const [descriptionTooLong, setDescriptionTooLong] = useState(false);
   const dispatch = useDispatch();
 
   const handleDelete = () => {
@@ -72,6 +77,14 @@ const Event: React.FC<EventProps> = ({ id, event }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setEditedEvent((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "description") {
+      if (value.length > 25) {
+        setDescriptionTooLong(true);
+      } else {
+        setDescriptionTooLong(false);
+      }
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -106,7 +119,7 @@ const Event: React.FC<EventProps> = ({ id, event }) => {
           <input
             type="text"
             name="name"
-            value={editedEvent.name}
+            value={truncateText(editedEvent.name, 20)}
             onChange={handleChange}
           />
         </div>
@@ -145,7 +158,11 @@ const Event: React.FC<EventProps> = ({ id, event }) => {
             name="description"
             value={editedEvent.description}
             onChange={handleChange}
+            maxLength={25}
           ></textarea>
+          {descriptionTooLong && (
+            <p className={css.warning}>Description cannot exceed 25 characters.</p>
+          )}
         </div>
         <div>
           <button type="submit">Save</button>
@@ -156,7 +173,7 @@ const Event: React.FC<EventProps> = ({ id, event }) => {
 
   return (
     <div className={css.container}>
-      <h3>{event.name}</h3>
+      <h3>{truncateText(event.name, 20)}</h3>
       <p>
         <span className={css.span}>Date:</span> {event.date}
       </p>
@@ -167,7 +184,7 @@ const Event: React.FC<EventProps> = ({ id, event }) => {
         <span className={css.span}>Category:</span> {event.category}
       </p>
       <p>
-        <span className={css.span}>Description:</span> {event.description}
+        <span className={css.span}>Description:</span> {truncateText(event.description, 100)}
       </p>
       <div className={css.btns}>
         <button type="button" onClick={handleEdit}>

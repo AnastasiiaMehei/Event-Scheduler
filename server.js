@@ -1,4 +1,4 @@
-import express, { Request, Response, NextFunction, RequestHandler } from 'express';
+import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.json());
 
 // Додаємо рядки для дозволу CORS
-const corsMiddleware: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+const corsMiddleware = (req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -38,7 +38,7 @@ app.use(express.static(publicDirectory));
 
 const eventsFilePath = path.join(__dirname, 'data', 'events.json');
 
-app.get('/events', (req: Request, res: Response) => {
+app.get('/events', (req, res) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -48,7 +48,7 @@ app.get('/events', (req: Request, res: Response) => {
   });
 });
 
-app.post('/events', (req: Request, res: Response) => {
+app.post('/events', (req, res) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -67,7 +67,7 @@ app.post('/events', (req: Request, res: Response) => {
   });
 });
 
-app.put('/events/:id', (req: Request, res: Response) => {
+app.put('/events/:id', (req, res) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -89,7 +89,7 @@ app.put('/events/:id', (req: Request, res: Response) => {
   });
 });
 
-app.delete('/events/:id', (req: Request, res: Response) => {
+app.delete('/events/:id', (req, res) => {
   fs.readFile(eventsFilePath, 'utf8', (err, data) => {
     if (err) {
       console.error('Failed to read events file:', err);
@@ -112,7 +112,7 @@ app.delete('/events/:id', (req: Request, res: Response) => {
 });
 
 // Обслуговуємо HTML-файл для будь-яких інших маршрутів, що залишилися
-app.get('*', (req: Request, res: Response) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(publicDirectory, 'index.html'));
 });
 

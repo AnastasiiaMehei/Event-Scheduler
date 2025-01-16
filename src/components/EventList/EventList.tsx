@@ -30,6 +30,10 @@ interface NewEvent {
   description: string;
 }
 
+const truncateText = (text: string, length: number) => {
+  return text.length > length ? text.substring(0, length) + "..." : text;
+};
+
 export default function EventList() {
   const events = useSelector((state: RootState) => selectFilteredEvents(state));
   const dispatch = useDispatch();
@@ -43,6 +47,8 @@ export default function EventList() {
   });
   const [loading, setLoading] = useState(true); // Add loading state
   const [displayCount, setDisplayCount] = useState(5); // Add state for the number of events to display
+  const [nameTooLong, setNameTooLong] = useState(false);
+  const [descriptionTooLong, setDescriptionTooLong] = useState(false);
 
   useEffect(() => {
     dispatch(fetchEvents()).then(() => setLoading(false)); // Set loading to false after fetching events
@@ -76,6 +82,18 @@ export default function EventList() {
   ) => {
     const { name, value } = e.target;
     setNewEvent((prevState) => ({ ...prevState, [name]: value }));
+
+    if (name === "name" && value.length > 20) {
+      setNameTooLong(true);
+    } else {
+      setNameTooLong(false);
+    }
+
+    if (name === "description" && value.length > 50) {
+      setDescriptionTooLong(true);
+    } else {
+      setDescriptionTooLong(false);
+    }
   };
 
   const handleFilterChange = (
@@ -160,10 +178,13 @@ export default function EventList() {
                 <input
                   type="text"
                   name="name"
-                  value={newEvent.name}
+                  value={truncateText(newEvent.name, 20)}
                   onChange={handleChange}
                   required
                 />
+                {nameTooLong && (
+                  <p className={css.warning}>Name cannot exceed 20 characters.</p>
+                )}
               </label>
               <label>
                 Date:
@@ -208,8 +229,12 @@ export default function EventList() {
                   name="description"
                   value={newEvent.description}
                   onChange={handleChange}
+                  maxLength={50}
                   required
                 ></textarea>
+                {descriptionTooLong && (
+                  <p className={css.warning}>Description cannot exceed 50 characters.</p>
+                )}
               </label>
               <button type="submit">Create Event</button>
             </form>

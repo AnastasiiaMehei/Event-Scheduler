@@ -78,5 +78,13 @@
     "category": "birthday",
     "description": "Hello world!",
     "id": 10
+  },
+  {
+    "name": "пппппппппппппппппппппппппппппппппппп",
+    "date": "2025-01-12",
+    "time": "11:57",
+    "category": "workshop",
+    "description": "ммммммм",
+    "id": 11
   }
 ]

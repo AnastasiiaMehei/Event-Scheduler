@@ -56,13 +56,18 @@
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  
 }
 
 input[type="text"],
 input[type="date"],
 select {
-  padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
+  padding: .6em 1.2em;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border-color: #7fff00;
 }
