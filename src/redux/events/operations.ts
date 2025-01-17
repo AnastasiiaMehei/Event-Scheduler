@@ -14,7 +14,6 @@ const api = axios.create({
   baseURL: "https://event-scheduler-server.onrender.com/",
 });
 
-// Отримання всіх подій
 export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string }>(
   "events/fetchAll",
   async (_, thunkAPI) => {
@@ -28,7 +27,6 @@ export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string
   }
 );
 
-// Створення події
 export const createEvent = createAsyncThunk<Event, Omit<Event, 'id'>, { rejectValue: string }>(
   "events/create",
   async (newEvent, thunkAPI) => {
@@ -42,7 +40,6 @@ export const createEvent = createAsyncThunk<Event, Omit<Event, 'id'>, { rejectVa
   }
 );
 
-// Редагування події
 export const updateEvent = createAsyncThunk<Event, { id: number; updatedEvent: Partial<Event> }, { rejectValue: string }>(
   "events/update",
   async ({ id, updatedEvent }, thunkAPI) => {
@@ -56,7 +53,6 @@ export const updateEvent = createAsyncThunk<Event, { id: number; updatedEvent: P
   }
 );
 
-// Видалення події
 export const deleteEvent = createAsyncThunk<number, number, { rejectValue: string }>(
   "events/delete",
   async (id, thunkAPI) => {
