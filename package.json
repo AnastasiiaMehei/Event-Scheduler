@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "react-scripts build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "node server.js"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.0",

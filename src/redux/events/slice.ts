@@ -31,17 +31,23 @@ const eventsSlice = createSlice({
       .addCase(fetchEvents.pending, (state) => {
         state.loading = true;
       })
-      .addCase(fetchEvents.fulfilled, (state, action) => {
-        state.loading = false;
-        state.events = action.payload;
-      })
+     .addCase(fetchEvents.fulfilled, (state, action) => {
+  state.loading = false;
+  state.events = action.payload;
+})
       .addCase(fetchEvents.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
       .addCase(createEvent.fulfilled, (state, action) => {
+        console.log('State events before push:', state.events)
+        if (!Array.isArray(state.events)) {
+          state.events = Array.from(state.events); // Convert Proxy to array if needed
+        }
         state.events.push(action.payload);
+        console.log('State events after push:', state.events);
       })
+      
       .addCase(updateEvent.fulfilled, (state, action) => {
         const index = state.events.findIndex(event => event.id === action.payload.id);
         if (index !== -1) {

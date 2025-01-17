@@ -25,25 +25,15 @@ interface CategoryOption {
   label: string;
 }
 
-interface EventData {
-  id: number;
-  name: string;
-  date: string;
-  time: string;
-  category: string;
-  description: string;
-}
 
-interface EventProps {
-  id: number;
-  event: EventData;
-}
-
-const truncateText = (text: string, length: number) => {
+interface EventProps { id: number; event: { eventId: string; name: string; date: string; time: string; category: string; description: string; }; }
+const truncateText = (text: string | undefined, length: number): string => {
+  if (!text) return '';
   return text.length > length ? text.substring(0, length) + "..." : text;
 };
 
-const Event: React.FC<EventProps> = ({ id, event }) => {
+
+const Event: React.FC<EventProps> = ({ event }) => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);

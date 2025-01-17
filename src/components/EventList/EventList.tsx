@@ -17,10 +17,10 @@ import {
 } from "../../redux/filter/filter";
 import Event from "../Event/Event";
 import Loader from "../Loader/Loader"; 
-import css from "../EventList/EventList.module.css";
 import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import css from "../EventList/EventList.module.css";
 
 interface NewEvent {
   name: string;
@@ -35,8 +35,12 @@ const truncateText = (text: string, length: number) => {
 };
 
 export default function EventList() {
-  const events = useSelector((state: RootState) => selectFilteredEvents(state));
-  const dispatch = useDispatch();
+  // const events = useSelector((state: RootState) => {
+  //   const selectedEvents = selectFilteredEvents(state);
+  //   console.log('Selected events:', selectedEvents);
+  //   return selectedEvents;
+  // });
+    const dispatch = useDispatch();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newEvent, setNewEvent] = useState<NewEvent>({
     name: "",
@@ -49,10 +53,21 @@ export default function EventList() {
   const [displayCount, setDisplayCount] = useState(5); // Add state for the number of events to display
   const [nameTooLong, setNameTooLong] = useState(false);
   const [descriptionTooLong, setDescriptionTooLong] = useState(false);
+  const [events, setEvents] = useState<EventData[]>([]);
 
   useEffect(() => {
-    dispatch(fetchEvents()).then(() => setLoading(false)); // Set loading to false after fetching events
+    console.log('Dispatching fetchEvents...');
+    dispatch(fetchEvents()).then((result) => {
+      console.log('Fetched events:', result);
+      const { data } = result.payload;  // Assuming `result.payload` contains the full API response
+      setEvents(data);  // Explicitly setting the events state with the data from the response
+      setLoading(false);
+    }).catch((error) => {
+      console.error('Error fetching events:', error);
+    });
   }, [dispatch]);
+  
+  
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -240,10 +255,11 @@ export default function EventList() {
             </form>
           )}
           <div className={css.eventsList}>
-            {events.slice(0, displayCount).map((event) => (
-              <Event key={event.id} id={event.id} event={event} />
-            ))}
-          </div>
+          {events.map((event) => (
+  <Event key={event.eventId} id={event.eventId} event={event} />
+))}
+
+</div>
           <div className={css.loadMoreDiv}>
             {displayCount < events.length && (
               <button onClick={loadMore} className={css.loadMoreBtn}>

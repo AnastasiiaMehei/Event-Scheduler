@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { createSelector } from "reselect";
-import { RootState } from "../store";
-import { selectAllEvents } from "../events/selectors";
+import { createSlice } from '@reduxjs/toolkit';
+import { createSelector } from 'reselect';
+import { RootState } from '../store';
+import { selectAllEvents } from '../events/selectors';
 
 interface FiltersState {
   name: string;
@@ -10,13 +10,13 @@ interface FiltersState {
 }
 
 const initialState: FiltersState = {
-  name: "",
-  date: "",
-  category: "",
+  name: '',
+  date: '',
+  category: '',
 };
 
 const filtersSlice = createSlice({
-  name: "filters",
+  name: 'filters',
   initialState,
   reducers: {
     changeEventsFilter: (state, action) => {
@@ -34,14 +34,15 @@ const filtersSlice = createSlice({
 export const { changeEventsFilter, changeDateFilter, changeCategoryFilter } = filtersSlice.actions;
 export default filtersSlice.reducer;
 
-export const selectEventsFilter = (state: RootState) => state.filters?.name ?? "";
-export const selectDateFilter = (state: RootState) => state.filters?.date ?? "";
-export const selectCategoryFilter = (state: RootState) => state.filters?.category ?? "";
+export const selectEventsFilter = (state: RootState) => state.filters?.name ?? '';
+export const selectDateFilter = (state: RootState) => state.filters?.date ?? '';
+export const selectCategoryFilter = (state: RootState) => state.filters?.category ?? '';
 
 export const selectFilteredEvents = createSelector(
   [selectAllEvents, selectEventsFilter, selectDateFilter, selectCategoryFilter],
   (events, nameFilter, dateFilter, categoryFilter) => {
-    if (!events) return [];
+    console.log('Filtered events:', events);
+    if (!Array.isArray(events)) return []; // Ensure events is an array
     return events.filter((event) => {
       const matchesName = !nameFilter || (event.name && event.name.toLowerCase().includes(nameFilter.toLowerCase()));
       const matchesDate = !dateFilter || event.date === dateFilter;
@@ -50,3 +51,4 @@ export const selectFilteredEvents = createSelector(
     });
   }
 );
+

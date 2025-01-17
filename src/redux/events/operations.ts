@@ -19,8 +19,11 @@ export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string
   async (_, thunkAPI) => {
     try {
       const response = await api.get("/events");
-      return response.data;
-    } catch (error) {
+
+   console.log('API Response:', response.data);
+   return response.data;
+  } 
+  catch (error) {
       console.error("Fetch events error:", error);
       return thunkAPI.rejectWithValue("Failed to fetch events");
     }
@@ -32,14 +35,13 @@ export const createEvent = createAsyncThunk<Event, Omit<Event, 'id'>, { rejectVa
   async (newEvent, thunkAPI) => {
     try {
       const response = await api.post("/events", newEvent);
-      return response.data;
+      return response.data; // This should be a single event object
     } catch (error) {
       console.error("Create event error:", error);
       return thunkAPI.rejectWithValue("Failed to create event");
     }
   }
 );
-
 export const updateEvent = createAsyncThunk<Event, { id: number; updatedEvent: Partial<Event> }, { rejectValue: string }>(
   "events/update",
   async ({ id, updatedEvent }, thunkAPI) => {
