@@ -82,7 +82,12 @@ export default function EventList() {
       return;
     }
     await dispatch(createEvent(newEvent));
-    dispatch(fetchEvents()); // Fetch events again after creating a new event
+    dispatch(fetchEvents()).then((result) => {
+      console.log('Fetched events:', result);
+      const { data } = result.payload; // Assuming `result.payload` contains the full API response
+      setEvents(data); // Explicitly setting the events state with the data from the response
+      setLoading(false);
+    }); // Fetch events again after creating a new event
     setShowCreateForm(false);
     setNewEvent({
       name: "",
