@@ -60,7 +60,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
   };
 
   const confirmDelete = () => {
-    dispatch(deleteEvent(event.eventId)) // Use the correct ID
+    dispatch(deleteEvent(event._id)) 
       .then(() => {
         toast.success("Event deleted successfully!");
         setShowModal(false);
@@ -96,7 +96,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateEvent({ id: event.eventId, updatedEvent: editedEvent }))
+    dispatch(updateEvent({ id: event._id, updatedEvent: editedEvent }))
       .then(() => {
         toast.success("Event updated successfully");
         setIsEditing(false);
