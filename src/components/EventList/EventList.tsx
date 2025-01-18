@@ -12,6 +12,7 @@ import Loader from "../Loader/Loader";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import css from "../EventList/EventList.module.css";
+import { parseISO, isSameDay } from 'date-fns'; // Import date-fns functions
 
 interface NewEvent {
   name: string;
@@ -56,9 +57,7 @@ export default function EventList() {
   const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
-    console.log('Dispatching fetchEvents...');
     dispatch(fetchEvents()).then((result) => {
-      console.log('Fetched events:', result);
       const { data } = result.payload; // Assuming `result.payload` contains the full API response
       setEvents(data); // Explicitly setting the events state with the data from the response
       setLoading(false);
@@ -79,7 +78,6 @@ export default function EventList() {
     }
     await dispatch(createEvent(newEvent));
     dispatch(fetchEvents()).then((result) => {
-      console.log('Fetched events:', result);
       const { data } = result.payload; // Assuming `result.payload` contains the full API response
       setEvents(data); // Explicitly setting the events state with the data from the response
       setLoading(false);
@@ -147,7 +145,7 @@ export default function EventList() {
   // Filter events locally
   const filteredEvents = events.filter((event) => {
     const matchesName = !nameFilter || event.name.toLowerCase().includes(nameFilter.toLowerCase());
-    const matchesDate = !dateFilter || event.date === dateFilter;
+    const matchesDate = !dateFilter || isSameDay(parseISO(event.date), parseISO(dateFilter));
     const matchesCategory = !categoryFilter || event.category === categoryFilter;
     return matchesName && matchesDate && matchesCategory;
   });
