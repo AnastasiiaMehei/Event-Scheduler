@@ -49,10 +49,15 @@ const eventsSlice = createSlice({
       })
       
       .addCase(updateEvent.fulfilled, (state, action) => {
+        console.log('State events before update:', state.events);
+        if (!Array.isArray(state.events)) {
+          state.events = Array.from(state.events); // Convert Proxy to array if needed
+        }
         const index = state.events.findIndex(event => event._id === action.payload.id);
         if (index !== -1) {
-          state.events[index] = action.payload;
+          state.events[index] = action.payload; // Update the event with the new data
         }
+        console.log('State events after update:', state.events);
       })
       .addCase(deleteEvent.fulfilled, (state, action) => {
         console.log('State events before filter:', state.events);
