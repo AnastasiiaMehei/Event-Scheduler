@@ -203,10 +203,10 @@ const Event: React.FC<EventProps> = ({ event, onUpdate, onDelete }) => {
       </p>
       <div className={css.btns}>
         <button type="button" onClick={handleEdit}>
-          <GrEdit />
+          <GrEdit />Edit
         </button>
         <button className={css.btn} onClick={handleDelete}>
-          <FaTrashCan />
+          <FaTrashCan />Delete
         </button>
       </div>
     </div>

@@ -10,9 +10,11 @@ import {
 import Event from "../Event/Event";
 import Loader from "../Loader/Loader"; 
 import { toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
+import { parseISO, isSameDay } from 'date-fns'; 
+import { IoReloadOutline } from "react-icons/io5";
 import css from "../EventList/EventList.module.css";
-import { parseISO, isSameDay } from 'date-fns'; // Import date-fns functions
 
 interface NewEvent {
   name: string;
@@ -287,6 +289,7 @@ export default function EventList() {
           <div className={css.loadMoreDiv}>
             {displayCount < filteredEvents.length && (
               <button onClick={loadMore} className={css.loadMoreBtn}>
+                <IoReloadOutline />
                 Load More
               </button>
             )}
