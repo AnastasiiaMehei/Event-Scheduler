@@ -41,7 +41,6 @@ export const selectCategoryFilter = (state: RootState) => state.filters?.categor
 export const selectFilteredEvents = createSelector(
   [selectAllEvents, selectEventsFilter, selectDateFilter, selectCategoryFilter],
   (events, nameFilter, dateFilter, categoryFilter) => {
-    console.log('Filtered events:', events);
     if (!Array.isArray(events)) return []; // Ensure events is an array
     return events.filter((event) => {
       const matchesName = !nameFilter || (event.name && event.name.toLowerCase().includes(nameFilter.toLowerCase()));

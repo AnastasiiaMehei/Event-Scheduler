@@ -20,7 +20,6 @@ export const fetchEvents = createAsyncThunk<Event[], void, { rejectValue: string
     try {
       const response = await api.get("/events");
 
-   console.log('API Response:', response.data);
    return response.data;
   } 
   catch (error) {

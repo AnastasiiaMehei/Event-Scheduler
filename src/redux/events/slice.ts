@@ -40,32 +40,26 @@ const eventsSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(createEvent.fulfilled, (state, action) => {
-        console.log('State events before push:', state.events)
         if (!Array.isArray(state.events)) {
-          state.events = Array.from(state.events); // Convert Proxy to array if needed
+          state.events = Array.from(state.events); 
         }
         state.events.push(action.payload);
-        console.log('State events after push:', state.events);
       })
       
       .addCase(updateEvent.fulfilled, (state, action) => {
-        console.log('State events before update:', state.events);
         if (!Array.isArray(state.events)) {
-          state.events = Array.from(state.events); // Convert Proxy to array if needed
+          state.events = Array.from(state.events); 
         }
         const index = state.events.findIndex(event => event._id === action.payload.id);
         if (index !== -1) {
-          state.events[index] = action.payload; // Update the event with the new data
+          state.events[index] = action.payload; 
         }
-        console.log('State events after update:', state.events);
       })
       .addCase(deleteEvent.fulfilled, (state, action) => {
-        console.log('State events before filter:', state.events);
         if (!Array.isArray(state.events)) {
-          state.events = Array.from(state.events); // Convert Proxy to array if needed
+          state.events = Array.from(state.events); 
         }
         state.events = state.events.filter(event => event._id !== action.payload);
-        console.log('State events after filter:', state.events);
       });
   },
 });

@@ -72,3 +72,8 @@ select {
   margin-bottom: 15px;
   border-color: #7fff00;
 }
+
+@media screen and (max-width: 768px) {
+  .filters {
+  flex-direction: column;
+  }}
