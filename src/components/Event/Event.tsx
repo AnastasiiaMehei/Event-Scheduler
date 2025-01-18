@@ -8,7 +8,6 @@ import { deleteEvent, updateEvent } from "../../redux/events/operations";
 import { FaTrashCan } from "react-icons/fa6";
 import { GrEdit } from "react-icons/gr";
 import { format } from 'date-fns';
-
 import css from "./Event.module.css";
 
 const categories = [
@@ -37,6 +36,8 @@ interface EventData {
 interface EventProps {
   id: string;
   event: EventData;
+  onUpdate: (updatedEvent: EventData) => void;
+  onDelete: (deletedEventId: string) => void;
 }
 
 const truncateText = (
@@ -47,7 +48,7 @@ const truncateText = (
   return text.length > length ? text.substring(0, length) + "..." : text;
 };
 
-const Event: React.FC<EventProps> = ({ event }) => {
+const Event: React.FC<EventProps> = ({ event, onUpdate, onDelete }) => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);
@@ -60,10 +61,11 @@ const Event: React.FC<EventProps> = ({ event }) => {
   };
 
   const confirmDelete = () => {
-    dispatch(deleteEvent(event._id)) 
+    dispatch(deleteEvent(event._id))
       .then(() => {
         toast.success("Event deleted successfully!");
         setShowModal(false);
+        onDelete(event._id);  // Notify parent component of the deletion
       })
       .catch((error) => {
         console.error("Failed to delete event:", error);
@@ -100,6 +102,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
       .then(() => {
         toast.success("Event updated successfully");
         setIsEditing(false);
+        onUpdate(editedEvent);  // Notify parent component of the update
       })
       .catch((error) => {
         console.error("Failed to update event:", error);

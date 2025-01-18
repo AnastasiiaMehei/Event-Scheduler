@@ -1,5 +1,4 @@
 import React, { ReactNode, MouseEvent } from "react";
-import { MdClose } from "react-icons/md";
 import css from "./Modal.module.css"; // Adjust the path as necessary
 
 interface ModalProps {
@@ -21,9 +20,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     <div className={css.modalBackdrop} onClick={handleBackdropClick}>
       <div className={css.modalBody}>
         <div className={css.btnsDiv}>
-          <button className={css.modalCloseBtn} onClick={onClose}>
-            <MdClose />
-          </button>
+      
         </div>
         {children}
       </div>

@@ -70,7 +70,7 @@ export default function EventList() {
       console.error('Error fetching events:', error);
     });
   }, [dispatch]);
-  
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const isDuplicate = events.some(
@@ -94,9 +94,7 @@ export default function EventList() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setNewEvent((prevState) => ({ ...prevState, [name]: value }));
@@ -131,6 +129,20 @@ export default function EventList() {
       default:
         break;
     }
+  };
+
+  const handleUpdate = (updatedEvent: EventData) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.eventId === updatedEvent.eventId ? updatedEvent : event
+      )
+    );
+  };
+
+  const handleDelete = (deletedEventId: string) => {
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event._id !== deletedEventId)
+    );
   };
 
   const loadMore = () => {
@@ -251,24 +263,26 @@ export default function EventList() {
                   required
                 ></textarea>
                 {descriptionTooLong && (
-                  <p className={css.warning}>Description cannot exceed 50 characters.</p>
+                  <p className={css.warning}>
+                    Description cannot exceed 50 characters.
+                  </p>
                 )}
               </label>
               <button type="submit">Create Event</button>
             </form>
           )}
-          {/* <div className={css.eventsList}>
-  {events.map((event) => (
-    <Event key={event.eventId} id={event.eventId} event={event} />
-  ))}
-</div> */}
-<ul className={css.eventsList}>
-  {events.map((event, index) => (
-    <li key={`${event.eventId}-${index}`}>
-      <Event id={event.eventId} event={event} />
-    </li>
-  ))}
-</ul>
+          <ul className={css.eventsList}>
+            {events.map((event, index) => (
+              <li key={`${event.eventId}-${index}`}>
+                <Event
+                  id={event.eventId}
+                  event={event}
+                  onUpdate={handleUpdate}
+                  onDelete={handleDelete}
+                />
+              </li>
+            ))}
+          </ul>
           <div className={css.loadMoreDiv}>
             {displayCount < events.length && (
               <button onClick={loadMore} className={css.loadMoreBtn}>
