@@ -1,23 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { MdEventBusy, MdEventAvailable } from "react-icons/md";
 import { Link } from "react-router-dom";
 import {
   fetchEvents,
   createEvent,
-  updateEvent,
-  deleteEvent,
 } from "../../redux/events/operations";
-import {
-  selectFilteredEvents,
-  changeEventsFilter,
-  changeDateFilter,
-  changeCategoryFilter,
-} from "../../redux/filter/filter";
 import Event from "../Event/Event";
 import Loader from "../Loader/Loader"; 
-import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import css from "../EventList/EventList.module.css";
@@ -58,6 +49,11 @@ export default function EventList() {
   const [nameTooLong, setNameTooLong] = useState(false);
   const [descriptionTooLong, setDescriptionTooLong] = useState(false);
   const [events, setEvents] = useState<EventData[]>([]);
+  
+  // Local state for filters
+  const [nameFilter, setNameFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     console.log('Dispatching fetchEvents...');
@@ -121,18 +117,12 @@ export default function EventList() {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    switch (name) {
-      case "name":
-        dispatch(changeEventsFilter(value));
-        break;
-      case "date":
-        dispatch(changeDateFilter(value));
-        break;
-      case "category":
-        dispatch(changeCategoryFilter(value));
-        break;
-      default:
-        break;
+    if (name === "name") {
+      setNameFilter(value);
+    } else if (name === "date") {
+      setDateFilter(value);
+    } else if (name === "category") {
+      setCategoryFilter(value);
     }
   };
 
@@ -146,13 +136,21 @@ export default function EventList() {
 
   const handleDelete = (deletedEventId: string) => {
     setEvents((prevEvents) =>
-      prevEvents.filter((event) => event._id !== deletedEventId)
+      prevEvents.filter((event) => event.eventId !== deletedEventId)
     );
   };
 
   const loadMore = () => {
     setDisplayCount((prevCount) => prevCount + 4);
   };
+
+  // Filter events locally
+  const filteredEvents = events.filter((event) => {
+    const matchesName = !nameFilter || event.name.toLowerCase().includes(nameFilter.toLowerCase());
+    const matchesDate = !dateFilter || event.date === dateFilter;
+    const matchesCategory = !categoryFilter || event.category === categoryFilter;
+    return matchesName && matchesDate && matchesCategory;
+  });
 
   return (
     <div className={css.container}>
@@ -277,7 +275,7 @@ export default function EventList() {
             </form>
           )}
           <ul className={css.eventsList}>
-            {events.map((event, index) => (
+            {filteredEvents.slice(0, displayCount).map((event, index) => (
               <li key={`${event.eventId}-${index}`}>
                 <Event
                   id={event.eventId}
@@ -289,7 +287,7 @@ export default function EventList() {
             ))}
           </ul>
           <div className={css.loadMoreDiv}>
-            {displayCount < events.length && (
+            {displayCount < filteredEvents.length && (
               <button onClick={loadMore} className={css.loadMoreBtn}>
                 Load More
               </button>
