@@ -248,12 +248,18 @@ export default function EventList() {
               <button type="submit">Create Event</button>
             </form>
           )}
-          <div className={css.eventsList}>
+          {/* <div className={css.eventsList}>
   {events.map((event) => (
     <Event key={event.eventId} id={event.eventId} event={event} />
   ))}
-</div>
-
+</div> */}
+<ul className={css.eventsList}>
+  {events.map((event, index) => (
+    <li key={`${event.eventId}-${index}`}>
+      <Event id={event.eventId} event={event} />
+    </li>
+  ))}
+</ul>
           <div className={css.loadMoreDiv}>
             {displayCount < events.length && (
               <button onClick={loadMore} className={css.loadMoreBtn}>
