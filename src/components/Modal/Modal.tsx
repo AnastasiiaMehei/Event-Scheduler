@@ -1,5 +1,5 @@
 import React, { ReactNode, MouseEvent } from "react";
-import css from "./Modal.module.css"; // Adjust the path as necessary
+import css from "./Modal.module.css";
 
 interface ModalProps {
   isOpen: boolean;
