@@ -30,6 +30,15 @@ interface NewEvent {
   description: string;
 }
 
+interface EventData {
+  eventId: string;
+  name: string;
+  date: string;
+  time: string;
+  category: string;
+  description: string;
+}
+
 const truncateText = (text: string, length: number) => {
   return text.length > length ? text.substring(0, length) + "..." : text;
 };
@@ -61,7 +70,7 @@ export default function EventList() {
       console.error('Error fetching events:', error);
     });
   }, [dispatch]);
-
+  
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const isDuplicate = events.some(
