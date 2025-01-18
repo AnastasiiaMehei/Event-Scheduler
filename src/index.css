@@ -97,6 +97,10 @@ textarea {
   min-height: 80px;
 }
 
+.ul, li {
+  list-style: none;
+
+}
 
 
 @media (prefers-color-scheme: light) {
