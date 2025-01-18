@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Select, { SingleValue } from "react-select";
-import "react-datepicker/dist/react-datepicker.css";
 import Modal from "../Modal/Modal";
 import { useDispatch } from "react-redux";
 import { deleteEvent, updateEvent } from "../../redux/events/operations";
 import { FaTrashCan } from "react-icons/fa6";
 import { GrEdit } from "react-icons/gr";
-import { MdClose } from "react-icons/md";
+import { format } from 'date-fns';
+
 import css from "./Event.module.css";
 
 const categories = [
@@ -25,13 +25,27 @@ interface CategoryOption {
   label: string;
 }
 
+interface EventData {
+  eventId: string;
+  name: string;
+  date: string;
+  time: string;
+  category: string;
+  description: string;
+}
 
-interface EventProps { id: number; event: { eventId: string; name: string; date: string; time: string; category: string; description: string; }; }
-const truncateText = (text: string | undefined, length: number): string => {
-  if (!text) return '';
+interface EventProps {
+  id: string;
+  event: EventData;
+}
+
+const truncateText = (
+  text: string | undefined,
+  length: number
+): string => {
+  if (!text) return "";
   return text.length > length ? text.substring(0, length) + "..." : text;
 };
-
 
 const Event: React.FC<EventProps> = ({ event }) => {
   const [showModal, setShowModal] = useState(false);
@@ -39,13 +53,14 @@ const Event: React.FC<EventProps> = ({ event }) => {
   const [editedEvent, setEditedEvent] = useState(event);
   const [descriptionTooLong, setDescriptionTooLong] = useState(false);
   const dispatch = useDispatch();
+  const formattedDate = format(new Date(event.date), 'yyyy-MM-dd');
 
   const handleDelete = () => {
     setShowModal(true);
   };
 
   const confirmDelete = () => {
-    dispatch(deleteEvent(id))
+    dispatch(deleteEvent(event.eventId)) // Use the correct ID
       .then(() => {
         toast.success("Event deleted successfully!");
         setShowModal(false);
@@ -64,7 +79,9 @@ const Event: React.FC<EventProps> = ({ event }) => {
     setIsEditing(true);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setEditedEvent((prev) => ({ ...prev, [name]: value }));
 
@@ -79,7 +96,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(updateEvent({ id: event.id, updatedEvent: editedEvent }))
+    dispatch(updateEvent({ id: event.eventId, updatedEvent: editedEvent }))
       .then(() => {
         toast.success("Event updated successfully");
         setIsEditing(false);
@@ -109,7 +126,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
           <input
             type="text"
             name="name"
-            value={truncateText(editedEvent.name, 20)}
+            value={editedEvent.name}
             onChange={handleChange}
           />
         </div>
@@ -134,7 +151,9 @@ const Event: React.FC<EventProps> = ({ event }) => {
         <label>Category:</label>
         <Select
           options={categories}
-          value={categories.find((cat) => cat.value === editedEvent.category)}
+          value={categories.find(
+            (cat) => cat.value === editedEvent.category
+          )}
           onChange={(selectedOption: SingleValue<CategoryOption>) =>
             setEditedEvent((prev) => ({
               ...prev,
@@ -151,7 +170,9 @@ const Event: React.FC<EventProps> = ({ event }) => {
             maxLength={25}
           ></textarea>
           {descriptionTooLong && (
-            <p className={css.warning}>Description cannot exceed 25 characters.</p>
+            <p className={css.warning}>
+              Description cannot exceed 25 characters.
+            </p>
           )}
         </div>
         <div>
@@ -165,7 +186,7 @@ const Event: React.FC<EventProps> = ({ event }) => {
     <div className={css.container}>
       <h3>{truncateText(event.name, 20)}</h3>
       <p>
-        <span className={css.span}>Date:</span> {event.date}
+        <span className={css.span}>Date:</span> {formattedDate}
       </p>
       <p>
         <span className={css.span}>Time:</span> {event.time}
@@ -174,7 +195,8 @@ const Event: React.FC<EventProps> = ({ event }) => {
         <span className={css.span}>Category:</span> {event.category}
       </p>
       <p>
-        <span className={css.span}>Description:</span> {truncateText(event.description, 100)}
+        <span className={css.span}>Description:</span>{" "}
+        {truncateText(event.description, 100)}
       </p>
       <div className={css.btns}>
         <button type="button" onClick={handleEdit}>

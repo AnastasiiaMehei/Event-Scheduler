@@ -35,12 +35,7 @@ const truncateText = (text: string, length: number) => {
 };
 
 export default function EventList() {
-  // const events = useSelector((state: RootState) => {
-  //   const selectedEvents = selectFilteredEvents(state);
-  //   console.log('Selected events:', selectedEvents);
-  //   return selectedEvents;
-  // });
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newEvent, setNewEvent] = useState<NewEvent>({
     name: "",
@@ -49,8 +44,8 @@ export default function EventList() {
     category: "",
     description: "",
   });
-  const [loading, setLoading] = useState(true); // Add loading state
-  const [displayCount, setDisplayCount] = useState(5); // Add state for the number of events to display
+  const [loading, setLoading] = useState(true);
+  const [displayCount, setDisplayCount] = useState(5);
   const [nameTooLong, setNameTooLong] = useState(false);
   const [descriptionTooLong, setDescriptionTooLong] = useState(false);
   const [events, setEvents] = useState<EventData[]>([]);
@@ -59,17 +54,15 @@ export default function EventList() {
     console.log('Dispatching fetchEvents...');
     dispatch(fetchEvents()).then((result) => {
       console.log('Fetched events:', result);
-      const { data } = result.payload;  // Assuming `result.payload` contains the full API response
-      setEvents(data);  // Explicitly setting the events state with the data from the response
+      const { data } = result.payload; // Assuming `result.payload` contains the full API response
+      setEvents(data); // Explicitly setting the events state with the data from the response
       setLoading(false);
     }).catch((error) => {
       console.error('Error fetching events:', error);
     });
   }, [dispatch]);
-  
-  
 
-  const handleCreate = (e: React.FormEvent) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const isDuplicate = events.some(
       (event) =>
@@ -79,7 +72,8 @@ export default function EventList() {
       toast.error("An event with the same date and time already exists!");
       return;
     }
-    dispatch(createEvent(newEvent));
+    await dispatch(createEvent(newEvent));
+    dispatch(fetchEvents()); // Fetch events again after creating a new event
     setShowCreateForm(false);
     setNewEvent({
       name: "",
@@ -131,7 +125,7 @@ export default function EventList() {
   };
 
   const loadMore = () => {
-    setDisplayCount((prevCount) => prevCount + 4); // Increase display count by 4
+    setDisplayCount((prevCount) => prevCount + 4);
   };
 
   return (
@@ -159,7 +153,7 @@ export default function EventList() {
           )}
         </button>
       </div>
-      {loading ? ( // Show loader while loading
+      {loading ? (
         <Loader />
       ) : (
         <>
@@ -187,7 +181,7 @@ export default function EventList() {
             </select>
           </div>
           {showCreateForm && (
-            <form onSubmit={handleCreate} >
+            <form onSubmit={handleCreate}>
               <label>
                 Name:
                 <input
@@ -255,11 +249,11 @@ export default function EventList() {
             </form>
           )}
           <div className={css.eventsList}>
-          {events.map((event) => (
-  <Event key={event.eventId} id={event.eventId} event={event} />
-))}
-
+  {events.map((event) => (
+    <Event key={event.eventId} id={event.eventId} event={event} />
+  ))}
 </div>
+
           <div className={css.loadMoreDiv}>
             {displayCount < events.length && (
               <button onClick={loadMore} className={css.loadMoreBtn}>
