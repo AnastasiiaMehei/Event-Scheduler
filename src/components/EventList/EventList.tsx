@@ -127,14 +127,14 @@ export default function EventList() {
   const handleUpdate = (updatedEvent: EventData) => {
     setEvents((prevEvents) =>
       prevEvents.map((event) =>
-        event.eventId === updatedEvent.eventId ? updatedEvent : event
+        event._id === updatedEvent._id ? updatedEvent : event
       )
     );
   };
 
   const handleDelete = (deletedEventId: string) => {
     setEvents((prevEvents) =>
-      prevEvents.filter((event) => event.eventId !== deletedEventId)
+      prevEvents.filter((event) => event._id !== deletedEventId)
     );
   };
 
