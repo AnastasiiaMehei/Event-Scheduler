@@ -34,7 +34,7 @@ export const createEvent = createAsyncThunk<Event, Omit<Event, 'id'>, { rejectVa
   async (newEvent, thunkAPI) => {
     try {
       const response = await api.post("/events", newEvent);
-      return response.data; // This should be a single event object
+      return response.data; 
     } catch (error) {
       console.error("Create event error:", error);
       return thunkAPI.rejectWithValue("Failed to create event");

@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Select, { SingleValue } from "react-select";
 import Modal from "../Modal/Modal";
 import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store"; 
 import { deleteEvent, updateEvent } from "../../redux/events/operations";
 import { FaTrashCan } from "react-icons/fa6";
 import { GrEdit } from "react-icons/gr";
@@ -53,7 +54,7 @@ const Event: React.FC<EventProps> = ({ event, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedEvent, setEditedEvent] = useState(event);
   const [descriptionTooLong, setDescriptionTooLong] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const formattedDate = format(new Date(event.date), 'yyyy-MM-dd');
 
   const handleDelete = () => {
@@ -65,7 +66,7 @@ const Event: React.FC<EventProps> = ({ event, onUpdate, onDelete }) => {
       .then(() => {
         toast.success("Event deleted successfully!");
         setShowModal(false);
-        onDelete(event._id);  // Notify parent component of the deletion
+        onDelete(event._id); 
       })
       .catch((error) => {
         console.error("Failed to delete event:", error);
@@ -102,7 +103,7 @@ const Event: React.FC<EventProps> = ({ event, onUpdate, onDelete }) => {
       .then(() => {
         toast.success("Event updated successfully");
         setIsEditing(false);
-        onUpdate(editedEvent);  // Notify parent component of the update
+        onUpdate(editedEvent);  
       })
       .catch((error) => {
         console.error("Failed to update event:", error);

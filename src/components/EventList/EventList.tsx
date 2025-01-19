@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { TiArrowBackOutline } from "react-icons/ti";
 import { MdEventBusy, MdEventAvailable } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -9,6 +8,8 @@ import {
 } from "../../redux/events/operations";
 import Event from "../Event/Event";
 import Loader from "../Loader/Loader"; 
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store"
 import { toast } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
@@ -38,7 +39,7 @@ const truncateText = (text: string, length: number) => {
 };
 
 export default function EventList() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newEvent, setNewEvent] = useState<NewEvent>({
     name: "",
@@ -52,16 +53,14 @@ export default function EventList() {
   const [nameTooLong, setNameTooLong] = useState(false);
   const [descriptionTooLong, setDescriptionTooLong] = useState(false);
   const [events, setEvents] = useState<EventData[]>([]);
-  
-  // Local state for filters
   const [nameFilter, setNameFilter] = useState("");
   const [dateFilter, setDateFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     dispatch(fetchEvents()).then((result) => {
-      const { data } = result.payload; // Assuming `result.payload` contains the full API response
-      setEvents(data); // Explicitly setting the events state with the data from the response
+      const { data } = result.payload; 
+      setEvents(data); 
       setLoading(false);
     }).catch((error) => {
       console.error('Error fetching events:', error);
@@ -81,10 +80,10 @@ export default function EventList() {
     }
     await dispatch(createEvent(newEvent));
     dispatch(fetchEvents()).then((result) => {
-      const { data } = result.payload; // Assuming `result.payload` contains the full API response
-      setEvents(data); // Explicitly setting the events state with the data from the response
+      const { data } = result.payload;
+      setEvents(data); 
       setLoading(false);
-    }); // Fetch events again after creating a new event
+    }); 
     setShowCreateForm(false);
     setNewEvent({
       name: "",
