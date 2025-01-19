@@ -76,4 +76,5 @@ select {
 @media screen and (max-width: 768px) {
   .filters {
   flex-direction: column;
+  align-items: center;
   }}

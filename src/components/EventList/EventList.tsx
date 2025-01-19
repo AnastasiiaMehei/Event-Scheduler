@@ -68,6 +68,7 @@ export default function EventList() {
     });
   }, [dispatch]);
 
+  
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     const isDuplicate = events.some(
